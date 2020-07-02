@@ -5,11 +5,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using ReversiApp.DAL;
+using ReversiApp.Data;
+using ReversiApp.Hubs;
 
 namespace ReversiApp
 {
@@ -26,7 +29,11 @@ namespace ReversiApp
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllersWithViews();
-            services.AddDbContext<SpelerContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ReversiData")));
+            services.AddRazorPages();
+            services.AddDbContext<IdentityContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ReversiData")));
+            services.AddDbContext<SpelContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ReversiData")));
+            services.AddMvc();
+            services.AddSignalR();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,13 +54,21 @@ namespace ReversiApp
 
             app.UseRouting();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
+
+
+
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllerRoute(
                     name: "default",
-                    pattern: "{controller=Spelers}/{action=Index}/{id?}");
+                    pattern: "{controller=Spellen}/{action=Index}/{id?}");
+                endpoints.MapControllers();
+                endpoints.MapRazorPages();
+                endpoints.MapHub<DoeZetHub>("/doezethub");
             });
         }
     }

@@ -1,20 +1,20 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using ReversiApp.Models;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace ReversiApp.Models
 {
-    public class Speler
+    public class Speler : IdentityUser
     {
-        public int Id { get; set; }
-
-        public string Naam { get; set; }
-
-        public string Wachtwoord { get; set; }
-
+      
         public string Token { get; set; }
 
-        public string Kleur { get; set; }
+        public Kleur Kleur { get; set; }
+
+
     }
 }

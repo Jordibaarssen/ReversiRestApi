@@ -1,0 +1,228 @@
+﻿@model ReversiApp.Models.Spel
+@{
+    ViewData["Title"] = "Bord";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<head>
+    <link href="~/css/LayoutReversiPagina.css" rel="stylesheet" />
+    <link href="~/css/style.min.css" rel="stylesheet" />
+    <script src="~/js/app.js"></script>
+    <script src="~/js/signalr/dist/browser/signalr.js"></script>
+</head>
+
+<div class="logo"><b>R<span>EV</span>E<span>R</span>SI</b></div>
+<div class="onderTekst">
+    <form asp-action="Leave">
+        <input type="hidden" asp-for="@Model.Id" />
+        <input type="submit" value="Leave" class="btn btn-danger" />
+    </form>
+    <br />
+    <b><span>Token: @Model.Token</span></b><br />
+    <b><span>Omschrijving: @Model.Omschrijving</span></b><br />
+    <b><span>Aan de beurt: @Model.AandeBeurt</span></b>
+</div>
+
+<div class="winnaar" id="winScherm">
+    <b id="winnaar"></b>
+    <br/>
+    <b><span id="scoreWinner"></span> - <span id="scoreLoser"></span></b>
+    <form asp-action="SpeelOpnieuw">
+        <input type="hidden" asp-for="@Model.Id" />
+        <input type="submit" value="Speel opnieuw" class="btn btn-danger" style='width:500px; height:100px; margin-top:30px'/>
+    </form>
+</div>
+
+<table class="bord" id="ReversiBord">
+    <tr>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+    </tr>
+
+    <tr>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+    </tr>
+
+    <tr>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+    </tr>
+
+    <tr>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+    </tr>
+
+    <tr>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+    </tr>
+
+    <tr>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+    </tr>
+
+    <tr>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+    </tr>
+
+    <tr>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+        </td>
+        <td class="vakje vakje-chalk">
+    </tr>
+
+</table>
+
+<script>
+
+    var bord = document.getElementById("ReversiBord"), rIndex, cIndex, kleur = 2;
+
+    // table rows
+    for (var i = 0; i < bord.rows.length; i++) {
+        // row cells
+        for (var j = 0; j < bord.rows[i].cells.length; j++) {
+            bord.rows[i].cells[j].onclick = function () {
+                rIndex = this.parentElement.rowIndex;
+                cIndex = this.cellIndex;
+                console.log("Row : " + rIndex + " , Cell : " + cIndex);
+
+                Game.Data.doeZet(rIndex, cIndex);
+
+            };
+        }
+    }
+
+
+</script>
+
+@section scripts {
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            Game.init();
+
+        });
+
+    </script>
+
+}
+
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="svg-filter">
+    <defs>
+        <filter id="filter-chalk">
+            <feTurbulence type="turbulence" baseFrequency="0.4" numOctaves="1" result="result1" />
+            <feDisplacementMap xChannelSelector="R" yChannelSelector="G" scale="5" in="SourceGraphic" in2="result1" />
+        </filter>
+    </defs>
+</svg>
+
+

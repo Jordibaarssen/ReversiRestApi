@@ -7,11 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReversiRestApi", "ReversiRe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpelUnitTest", "SpelUnitTest\SpelUnitTest.csproj", "{7BB19E44-EA81-4E4B-AA1B-B68105A74CC4}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReversiRestApiCaller", "ReversiRestApiCaller\ReversiRestApiCaller.csproj", "{108F68F1-42FC-4119-B3F6-BF2944171A1F}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MvcReversiRestApi", "MvcReversiRestApi\MvcReversiRestApi.csproj", "{30B06BF6-EB44-4189-ADC7-7B569F0A5A7C}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ReversiApp", "ReversiApp\ReversiApp.csproj", "{7BB5F3EF-E20F-49BC-B0F2-BEC85949CF06}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReversiApp", "ReversiApp\ReversiApp.csproj", "{7BB5F3EF-E20F-49BC-B0F2-BEC85949CF06}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,14 +23,6 @@ Global
 		{7BB19E44-EA81-4E4B-AA1B-B68105A74CC4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7BB19E44-EA81-4E4B-AA1B-B68105A74CC4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7BB19E44-EA81-4E4B-AA1B-B68105A74CC4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{108F68F1-42FC-4119-B3F6-BF2944171A1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{108F68F1-42FC-4119-B3F6-BF2944171A1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{108F68F1-42FC-4119-B3F6-BF2944171A1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{108F68F1-42FC-4119-B3F6-BF2944171A1F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{30B06BF6-EB44-4189-ADC7-7B569F0A5A7C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{30B06BF6-EB44-4189-ADC7-7B569F0A5A7C}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{30B06BF6-EB44-4189-ADC7-7B569F0A5A7C}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{30B06BF6-EB44-4189-ADC7-7B569F0A5A7C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7BB5F3EF-E20F-49BC-B0F2-BEC85949CF06}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7BB5F3EF-E20F-49BC-B0F2-BEC85949CF06}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7BB5F3EF-E20F-49BC-B0F2-BEC85949CF06}.Release|Any CPU.ActiveCfg = Release|Any CPU

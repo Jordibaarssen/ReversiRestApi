@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Nancy.Json;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -8,35 +10,21 @@ namespace ReversiRestApi
     public enum Kleur { Geen , Wit, Zwart };
     public enum SoortZet { L, R, B, O, LB, LO, RB, RO }
 
-    public class Spel : ISpel
+    public class Spel
     {
+       
         public int ID { get; set; }
         public string Omschrijving { get; set; }
         public string Token { get; set; }
         public ICollection<Speler> Spelers { get; set; }
         public Kleur[,] Bord { get; set; }
-//        public IEnumerable<Positie> Posities { get; set; }
+        public IEnumerable<Positie> Posities { get; set; }
         public Kleur AandeBeurt { get; set; }
-        //public IEnumerable<Positie> VolledigBord
-        //{
-        //    get
-        //    {
-        //        List<Positie> posities = new List<Positie>();
-
-
-
-        //        return posities;
-        //    }
-        //}
-
-        
-
         public SoortZet richting;
 
         public Spel()
         {
             this.Bord = new Kleur[8, 8];
- 
             this.Bord[3, 3] = Kleur.Wit;
             this.Bord[3, 4] = Kleur.Zwart;
             this.Bord[4, 3] = Kleur.Zwart;

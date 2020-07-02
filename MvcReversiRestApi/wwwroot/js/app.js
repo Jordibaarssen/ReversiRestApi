@@ -1,243 +1,228 @@
-const apiUrl = 'url/super/duper/game';
+"use strict";
 
-const Game = (function(url){
-    console.log('hallo, vanuit een module');
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-    //Configuratie en state waarden
-    let configMap = {
-        apiUrl: url
-    };
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-    // Private function init
-    const privateInit = function(afterInit){
-        console.log(configMap.apiUrl);
-        afterInit();
-    };
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-    const _getCurrentGameState = function () {
-        Game.Data.s
-    };
+var apiUrl = 'url/super/duper/game';
+
+var Game = function (url) {
+  console.log('hallo, vanuit een module'); //Configuratie en state waarden
+
+  var configMap = {
+    apiUrl: url
+  }; // Private function init
+
+  var privateInit = function privateInit(afterInit) {
+    console.log(configMap.apiUrl);
+    afterInit(); //scope.setInterval(_getCurrentGameState, 2000);
+  };
+
+  var _getCurrentGameState = function _getCurrentGameState() {
+    Game.Data.stateMap.gamestate = Game.Model.getGameState();
+  }; // Waarde object geretourneerd aan de outer scope
 
 
-    // Waarde/object geretourneerd aan de outer scope
-    return {
-        init: privateInit
+  return {
+    init: privateInit
+  };
+}(apiUrl);
+
+Game.Data = function () {
+  console.log('hallo, vanuit module Data');
+  var configMap = {
+    //apiKey: '7bae2caf9621a6b9d4bdf44399982675',
+    mock: [{
+      url: 'api/Spel/Beurt',
+      data: 0
+    }]
+  };
+
+  var getMockData = function getMockData(url) {
+    var mockData = configMap.mock;
+    return new Promise(function (resolve, reject) {
+      resolve(mockData);
+    });
+  };
+
+  var stateMap = {
+    environment: 'development',
+    gamestate: ''
+  };
+
+  var get = function get(url) {
+    if (stateMap.environment === "production") {
+      return $.get(url).then(function (r) {
+        return r;
+      })["catch"](function (e) {
+        console.log(e.message);
+      });
+    } else if (stateMap.environment === "development") {
+      return getMockData(url);
     }
+  };
 
-})(apiUrl);
-
-
-
-Game.Data = (function(){
-    console.log('hallo, vanuit module Data');
-
-    let configMap = {
-        //apiKey: '7bae2caf9621a6b9d4bdf44399982675',
-        mock: [
-            {
-                url: 'api/Spel/Beurt',
-                data: 0
-            }
-        ]
-    };
-
-    const getMockData = function(url){
-
-        const mockData = configMap.mock;
-
-        return new Promise((resolve, reject) => {
-            resolve(mockData);
-        });
-
-    };
-
-    let stateMap = {
-        environment : 'development',
-        gamestate : ''
-
-    };
-
-    const get = function(url) {
-
-        if(stateMap.environment === "production") {
-            return $.get(url)
-                .then(r => {
-                    return r
-                })
-                .catch(e => {
-                    console.log(e.message);
-
-                });
-        }else if(stateMap.environment === "development") {
-            return getMockData(url);
-        }
-     };
-
-
-    const privateInit = function(){
-        if(stateMap.environment === "development")
-        {
-            return getMockData();
-        }else if(stateMap.environment === "production")
-        {
-            //doe request aan server
-            //xhttp.open("GET", "ajax_info.txt", true);
-            //xhttp.send();
-
-
-        }else
-        {
-            throw new Error("de environment is geen development of production")
-        }
-    };
-
-    return{
-        init: privateInit,
-        get: get
+  var privateInit = function privateInit() {
+    if (stateMap.environment === "development") {
+      return getMockData();
+    } else if (stateMap.environment === "production") {//doe request aan server
+      //xhttp.open("GET", "ajax_info.txt", true);
+      //xhttp.send();
+    } else {
+      throw new Error("de environment is geen development of production");
     }
+  };
 
-})();
-Game.Model = (function(){
-    console.log('hallo, vanuit module Model');
+  return {
+    init: privateInit,
+    get: get,
+    stateMap: stateMap
+  };
+}();
 
-    let configMap;
+Game.Model = function () {
+  console.log('hallo, vanuit module Model');
+  var configMap;
 
-    const privateInit = function(callback){
-        console.log("private data");
-    };
+  var privateInit = function privateInit(callback) {
+    console.log("private data");
+  };
 
-    const getWeather = function (url) {
-        Game.Data.get(url).then(data =>
-        {
+  var getWeather = function getWeather(url) {
+    Game.Data.get(url).then(function (data) {
+      if (data.main.temp == null) {
+        throw new Error("Geen temperatuur");
+      }
 
-            if(data.main.temp == null){
-                throw new Error("Geen temperatuur")
-            }
+      console.log(data);
+    });
+  };
 
-            console.log(data)
-        });
+  var _getGameState = function _getGameState() {
+    //aanvraag via Game.Data
+    var data = Game.Data.get('/api/Spel/Beurt/<token>'); //controle of ontvangen data valide is
 
-    };
-
-    const _getGameState = function(){
-
-        //aanvraag via Game.Data
-        let data = Game.Data.get('/api/Spel/Beurt/<token>');
-        //controle of ontvangen data valide is
-        if(data === 0){
-            //geen waarde
-
-        }else if(data === 1){
-            //wit aan zet
-
-        }else if(data === 2){
-            //zwart aan zet
-
-        }else{
-            throw new Error("ongeldige data")
-        }
-
-    };
-
-    return{
-        init: privateInit,
-        weather: getWeather,
-        getGameState: _getGameState
+    if (data === 0) {//geen waarde
+    } else if (data === 1) {//wit aan zet
+    } else if (data === 2) {//zwart aan zet
+    } else {
+      throw new Error("ongeldige data");
     }
+  };
 
-})();
-Game.Reversi = (function(){
-    console.log('hallo, vanuit module Reversi')
+  return {
+    init: privateInit,
+    weather: getWeather,
+    getGameState: _getGameState
+  };
+}();
 
-    let configMap;
+Game.Reversi = function () {
+  console.log('hallo, vanuit module Reversi');
+  var configMap;
 
-    const privateInit = function(){
-        console.log("private spel");
-    };
+  var privateInit = function privateInit() {
+    console.log("private spel");
+  };
 
-    return{
-        init: privateInit
+  return {
+    init: privateInit
+  };
+}();
+
+var FeedbackWidget = /*#__PURE__*/function () {
+  function FeedbackWidget(elementId) {
+    _classCallCheck(this, FeedbackWidget);
+
+    this._elementId = elementId;
+  }
+
+  _createClass(FeedbackWidget, [{
+    key: "show",
+    value: function show(message, type) {
+      var x = document.getElementById(this._elementId);
+      x.style.display = "block";
+      $(x).text(message);
+
+      if (type == "danger") {
+        $(x).addClass('alert alert-danger');
+        $(x).removeClass('alert alert-success');
+      } else if (type == "success") {
+        $(x).addClass('alert alert-success');
+        $(x).removeClass('alert alert-danger');
+      }
+
+      var msg = {
+        message: message,
+        type: type
+      };
+      this.log(msg);
+      console.log(this.history());
     }
+  }, {
+    key: "hide",
+    value: function hide() {
+      var x = document.getElementById(this._elementId);
+      x.style.display = "none";
+    } //    count = 1;
 
-})();
+  }, {
+    key: "log",
+    value: function log(message) {
+      {
+        var lowestInt = this.count - 10;
 
-class FeedbackWidget {
-    constructor(elementId) {
-        this._elementId = elementId;
-    }
-
-
-
-    get elementId() { //getter, set keyword voor setter methode
-        return this._elementId();
-    }
-
-    show(message, type) {
-        var x = document.getElementById(this._elementId);
-        x.style.display = "block";
-        $(x).text(message);
-        if(type == "danger"){
-            $(x).addClass('alert alert-danger')
-            $(x).removeClass('alert alert-success')
-        }else if(type == "success"){
-            $(x).addClass('alert alert-success')
-            $(x).removeClass('alert alert-danger')
+        if (localStorage.length >= 10) {
+          localStorage.removeItem('feedback_widget' + lowestInt);
+          console.log("boven de 10");
         }
 
-        var msg = {message : message, type : type};
-        this.log(msg);
-
-console.log(this.history());
+        localStorage.setItem('feedback_widget' + this.count, JSON.stringify(message));
+        this.count++;
+      }
     }
+  }, {
+    key: "removelog",
+    value: function removelog() {
+      var lowestInt = this.count - 10;
+      var i;
 
-    hide() {
-        var x = document.getElementById(this._elementId);
-        x.style.display = "none";
+      for (i = lowestInt; i < this.count; i++) {
+        localStorage.removeItem('feedback_widget' + i);
+      }
+
+      for (i = 0; i < 10; i++) {
+        localStorage.removeItem('feedback_widget' + i);
+      }
     }
+  }, {
+    key: "history",
+    value: function history() {
+      var storage = new Array();
+      var lowestInt = this.count - localStorage.length;
+      var i;
 
-    count = 1;
-    log(message){
-        {
-            let lowestInt = this.count - 10;
-            if(localStorage.length >= 10){
-                localStorage.removeItem('feedback_widget'+ (lowestInt));
-                console.log("boven de 10");
-            }
-            localStorage.setItem('feedback_widget'+ (this.count) , JSON.stringify(message));
-            this.count++;
-        }
+      for (i = lowestInt; i < this.count; i++) {
+        storage.push(JSON.parse(localStorage.getItem('feedback_widget' + i)));
+      }
+
+      var stringbuild = "";
+
+      for (i = 0; i < storage.length; i++) {
+        stringbuild += storage[i].type + " - " + storage[i].message + "\n";
+      }
+
+      return stringbuild; //console.log(stringbuild);
     }
-
-    removelog(){
-        let lowestInt = this.count - 10;
-        let i;
-        for(i=lowestInt; i<this.count; i++){
-            localStorage.removeItem('feedback_widget' +(i));
-        }
-        for(i=0; i<10; i++){
-            localStorage.removeItem('feedback_widget' +(i));
-        }
+  }, {
+    key: "elementId",
+    get: function get() {
+      //getter, set keyword voor setter methode
+      return this._elementId();
     }
+  }]);
 
-    history() {
-        
-        let storage = new Array();
-        let lowestInt = this.count - localStorage.length;
-        let i;
-        for (i = lowestInt; i < this.count; i++) {
-            storage.push(JSON.parse(localStorage.getItem('feedback_widget' +(i))));
-        }
-
-        let stringbuild = "";
-        for(i=0; i<storage.length;i++){
-            stringbuild += storage[i].type + " - " + storage[i].message + "\n"
-        }
-        return stringbuild;
-        //console.log(stringbuild);
-    }
-
-}
-
-
-
-
+  return FeedbackWidget;
+}();
